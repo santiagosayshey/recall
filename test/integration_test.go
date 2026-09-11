@@ -1,4 +1,10 @@
-package main
+//go:build integration
+
+// Package test replays the captured webhooks through a built container
+// image and checks the exact lines it logs and the files it leaves. Run it
+// with `make check-integration`; CI runs it against the image the build job
+// produced.
+package test
 
 import (
 	"bufio"
@@ -7,31 +13,18 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"strings"
 	"testing"
 )
 
-// The integration test builds the real binary, runs it, posts the captured
-// webhooks over HTTP, and checks the exact lines it logs and the files it
-// leaves. Skipped under -short.
-
-var binary string
+// image is the container image under test.
+var image = os.Getenv("RECALL_IMAGE")
 
 func TestMain(m *testing.M) {
-	dir, err := os.MkdirTemp("", "recall-build")
-	if err != nil {
-		panic(err)
+	if image == "" {
+		panic("RECALL_IMAGE must name the image to test")
 	}
-	binary = filepath.Join(dir, "recall")
-	build := exec.Command("go", "build", "-o", binary, ".")
-	build.Stderr = os.Stderr
-	if err := build.Run(); err != nil {
-		panic("build: " + err.Error())
-	}
-	code := m.Run()
-	os.RemoveAll(dir)
-	os.Exit(code)
+	os.Exit(m.Run())
 }
 
 type instance struct {
@@ -43,12 +36,18 @@ type instance struct {
 	seen []string
 }
 
-// start runs the binary on a free port with a fresh data directory and
+// start runs the artifact on a free port with the given data directory and
 // waits for its first log line.
 func start(t *testing.T, data string) *instance {
 	t.Helper()
-	cmd := exec.Command(binary, "serve", "--listen", "127.0.0.1:0", "--data", data)
-	cmd.Env = append(os.Environ(), "TZ=Australia/Adelaide")
+	name := "recall-test-" + strings.ReplaceAll(strings.ToLower(t.Name()), "/", "-")
+	// The image runs as a non-root user, so it must be able to write the
+	// mounted directory.
+	if err := os.Chmod(data, 0o777); err != nil {
+		t.Fatal(err)
+	}
+	cmd := exec.Command("docker", "run", "--rm", "--name", name, "-p", "127.0.0.1:0:8471",
+		"-v", data+":/data", "-e", "TZ=Australia/Adelaide", image, "serve")
 	cmd.Stderr = os.Stderr
 	stdout, err := cmd.StdoutPipe()
 	if err != nil {
@@ -58,17 +57,28 @@ func start(t *testing.T, data string) *instance {
 		t.Fatal(err)
 	}
 	in := &instance{t: t, data: data, cmd: cmd, out: bufio.NewScanner(stdout)}
-	t.Cleanup(func() {
-		cmd.Process.Signal(os.Interrupt)
-		cmd.Wait()
-	})
+	t.Cleanup(in.stop)
 	first := in.next()
-	m := regexp.MustCompile(`listen=127\.0\.0\.1:(\d+)`).FindStringSubmatch(first)
-	if m == nil {
-		t.Fatalf("no listen address in first line: %s", first)
+	if !strings.HasPrefix(first, "level=INFO msg=\"recall serving\" ") {
+		t.Fatalf("unexpected first line: %s", first)
 	}
-	in.url = "http://127.0.0.1:" + m[1]
+	// The container logs its own port; ask Docker for the published one.
+	out, err := exec.Command("docker", "port", name, "8471/tcp").Output()
+	if err != nil {
+		t.Fatalf("docker port: %v", err)
+	}
+	in.url = "http://" + strings.TrimSpace(strings.Split(string(out), "\n")[0])
 	return in
+}
+
+// stop asks the container to shut down and waits for it; docker run
+// forwards the interrupt.
+func (in *instance) stop() {
+	if in.cmd.ProcessState != nil {
+		return
+	}
+	in.cmd.Process.Signal(os.Interrupt)
+	in.cmd.Wait()
 }
 
 // next returns the next log line with its timestamp removed, so the rest
@@ -88,7 +98,7 @@ func (in *instance) next() string {
 
 func (in *instance) post(name string) int {
 	in.t.Helper()
-	raw, err := os.ReadFile(filepath.Join("..", "..", "internal", "webhook", "testdata", name+".json"))
+	raw, err := os.ReadFile(filepath.Join("..", "internal", "webhook", "testdata", name+".json"))
 	if err != nil {
 		in.t.Fatal(err)
 	}
@@ -159,8 +169,7 @@ func TestRestartKeepsGrabs(t *testing.T) {
 	in := start(t, data)
 	in.post("sonarr-grab-pack")
 	in.next()
-	in.cmd.Process.Signal(os.Interrupt)
-	in.cmd.Wait()
+	in.stop()
 
 	in = start(t, data)
 	if !strings.HasSuffix(in.seen[0], " grabs=1") {
