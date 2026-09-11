@@ -1,4 +1,4 @@
-// Command recall catches Radarr and Sonarr imports that score lower than
+// Command recall catches *arr imports that score lower than
 // their grab. It receives both apps' webhooks, keeps the grab and import
 // scores for each download, and pages ntfy when they disagree.
 package main
