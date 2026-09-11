@@ -1,0 +1,53 @@
+# A real Radarr and Sonarr beside Recall, for the registration test. The
+# API keys and instance names are set the way the lab sets them, through
+# the apps' own environment variables, and the same keys reach Recall
+# through config.yml. Nothing here is secret; it never leaves the test.
+x-keys: &keys
+  RADARR_TEST_KEY: 0123456789abcdef0123456789abcdef
+  SONARR_TEST_KEY: fedcba9876543210fedcba9876543210
+  RECALL_SECRET: recall-test-secret
+
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:6.3.0.10514-ls315
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Australia/Adelaide
+      RADARR__APP__INSTANCENAME: Radarr Test
+      RADARR__AUTH__APIKEY: 0123456789abcdef0123456789abcdef
+      RADARR__AUTH__METHOD: External
+      RADARR__LOG__ANALYTICSENABLED: "false"
+    ports:
+      - "127.0.0.1::7878"
+    tmpfs:
+      - /config
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:4.0.19.2979-ls323
+    environment:
+      PUID: "1000"
+      PGID: "1000"
+      TZ: Australia/Adelaide
+      SONARR__APP__INSTANCENAME: Sonarr Test
+      SONARR__AUTH__APIKEY: fedcba9876543210fedcba9876543210
+      SONARR__AUTH__METHOD: External
+      SONARR__LOG__ANALYTICSENABLED: "false"
+    ports:
+      - "127.0.0.1::8989"
+    tmpfs:
+      - /config
+
+  recall:
+    image: ${RECALL_IMAGE:-recall:local}
+    environment:
+      <<: *keys
+      TZ: Australia/Adelaide
+    volumes:
+      - ./config.yml:/config/config.yml:ro
+      - data:/data
+    ports:
+      - "127.0.0.1::8471"
+
+volumes:
+  data:

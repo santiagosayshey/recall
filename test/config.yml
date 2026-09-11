@@ -1,0 +1,12 @@
+# Recall's config for the test compose. See the README for every key.
+url: http://recall:8471/webhook
+secret: ${RECALL_SECRET}
+instances:
+  - name: Radarr Test
+    app: radarr
+    url: http://radarr:7878
+    apiKey: ${RADARR_TEST_KEY}
+  - name: Sonarr Test
+    app: sonarr
+    url: http://sonarr:8989
+    apiKey: ${SONARR_TEST_KEY}

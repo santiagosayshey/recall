@@ -4,11 +4,13 @@
 package server
 
 import (
+	"crypto/subtle"
 	"errors"
 	"io"
 	"log/slog"
 	"net/http"
 
+	"github.com/santiagosayshey/recall/internal/config"
 	"github.com/santiagosayshey/recall/internal/decide"
 	"github.com/santiagosayshey/recall/internal/store"
 	"github.com/santiagosayshey/recall/internal/webhook"
@@ -21,19 +23,21 @@ const maxBody = 1 << 20
 type Options struct {
 	Logger *slog.Logger
 	Store  *store.Store
+	Secret string // when set, a webhook must carry it in config.SecretHeader
 }
 
 type Server struct {
-	log   *slog.Logger
-	store *store.Store
-	mux   *http.ServeMux
+	log    *slog.Logger
+	store  *store.Store
+	secret string
+	mux    *http.ServeMux
 }
 
 // New returns the handler. A grab goes to the store. An import goes to the
 // store, is weighed against its grab, and the decision goes to the store
 // and to the log. Everything else is logged and dropped.
 func New(o Options) *Server {
-	s := &Server{log: o.Logger, store: o.Store, mux: http.NewServeMux()}
+	s := &Server{log: o.Logger, store: o.Store, secret: o.Secret, mux: http.NewServeMux()}
 	if s.log == nil {
 		s.log = slog.New(slog.DiscardHandler)
 	}
@@ -52,6 +56,11 @@ func (s *Server) health(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) webhook(w http.ResponseWriter, r *http.Request) {
+	if s.secret != "" && subtle.ConstantTimeCompare([]byte(r.Header.Get(config.SecretHeader)), []byte(s.secret)) != 1 {
+		s.log.Warn("refused", "from", r.RemoteAddr, "reason", "missing or wrong "+config.SecretHeader)
+		http.Error(w, "missing or wrong "+config.SecretHeader, http.StatusUnauthorized)
+		return
+	}
 	body, err := io.ReadAll(http.MaxBytesReader(w, r.Body, maxBody))
 	if err != nil {
 		http.Error(w, "body too large or unreadable", http.StatusRequestEntityTooLarge)

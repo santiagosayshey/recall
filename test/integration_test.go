@@ -172,7 +172,7 @@ func TestRestartKeepsGrabs(t *testing.T) {
 	in.stop()
 
 	in = start(t, data)
-	if !strings.HasSuffix(in.seen[0], " grabs=1") {
+	if !strings.Contains(in.seen[0], " grabs=1 ") {
 		t.Errorf("restart did not reload the grab: %s", in.seen[0])
 	}
 	in.post("sonarr-import-pack-e02")

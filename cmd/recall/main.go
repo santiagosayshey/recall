@@ -14,6 +14,7 @@ var version = "dev"
 const usage = `usage: recall <command> [flags]
 
   serve     receive webhooks and log a decision for every import
+  register  make each instance's Recall connection right, once
   version   print the version
 `
 
@@ -32,6 +33,8 @@ func main() {
 	switch os.Args[1] {
 	case "serve":
 		os.Exit(runServe(args))
+	case "register":
+		os.Exit(runRegister(args))
 	case "version":
 		fmt.Println(version)
 	default:
