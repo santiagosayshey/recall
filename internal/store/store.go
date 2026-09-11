@@ -1,5 +1,5 @@
-// Package store keeps grabs and imports on disk as JSON Lines, one file
-// each, append only. It holds the grabs in memory by download id, which is
+// Package store keeps grabs, imports and decisions on disk as JSON Lines,
+// one file each, append only. It holds the grabs in memory by download id, which is
 // the one lookup the decision needs.
 package store
 
@@ -14,21 +14,24 @@ import (
 	"sync"
 	"time"
 
+	"github.com/santiagosayshey/recall/internal/decide"
 	"github.com/santiagosayshey/recall/internal/webhook"
 )
 
 const (
-	grabsFile   = "grabs.jsonl"
-	importsFile = "imports.jsonl"
+	grabsFile     = "grabs.jsonl"
+	importsFile   = "imports.jsonl"
+	decisionsFile = "decisions.jsonl"
 )
 
 // Store is one data directory. Safe for concurrent use.
 type Store struct {
-	now     func() time.Time
-	mu      sync.Mutex
-	grabs   *os.File
-	imports *os.File
-	byID    map[string]webhook.Grab
+	now       func() time.Time
+	mu        sync.Mutex
+	grabs     *os.File
+	imports   *os.File
+	decisions *os.File
+	byID      map[string]webhook.Grab
 }
 
 type Options struct {
@@ -48,6 +51,11 @@ func Open(dir string, o Options) (*Store, error) {
 	}
 	if s.imports, err = open(dir, importsFile); err != nil {
 		s.grabs.Close()
+		return nil, err
+	}
+	if s.decisions, err = open(dir, decisionsFile); err != nil {
+		s.grabs.Close()
+		s.imports.Close()
 		return nil, err
 	}
 	if err := s.load(); err != nil {
@@ -82,7 +90,7 @@ func (s *Store) load() error {
 }
 
 func (s *Store) Close() error {
-	return errors.Join(s.grabs.Close(), s.imports.Close())
+	return errors.Join(s.grabs.Close(), s.imports.Close(), s.decisions.Close())
 }
 
 // grabLine and importLine are what a line holds: when Recall received it,
@@ -97,6 +105,11 @@ type importLine struct {
 	At time.Time `json:"at"`
 	webhook.Import
 	Raw json.RawMessage `json:"raw"`
+}
+
+type decisionLine struct {
+	At time.Time `json:"at"`
+	decide.Decision
 }
 
 // AddGrab appends the grab and makes it the one found for its download id.
@@ -115,6 +128,13 @@ func (s *Store) AddImport(i webhook.Import) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	return writeLine(s.imports, importLine{s.now(), i, i.Raw})
+}
+
+// AddDecision appends the decision.
+func (s *Store) AddDecision(d decide.Decision) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return writeLine(s.decisions, decisionLine{s.now(), d})
 }
 
 // Grab returns the latest grab for a download id.

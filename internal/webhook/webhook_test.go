@@ -185,3 +185,19 @@ func TestParseScoredButUnknownIsOther(t *testing.T) {
 		t.Fatalf("got %s", dump(ev))
 	}
 }
+
+func TestMediaString(t *testing.T) {
+	tests := []struct {
+		m    Media
+		want string
+	}{
+		{Media{Title: "100% Wolf", Year: 2020}, "100% Wolf (2020)"},
+		{Media{Title: "Sherlock", Year: 2010, Episodes: []Episode{{1, 2}}}, "Sherlock (2010) S01E02"},
+		{Media{Title: "Sherlock", Year: 2010, Episodes: []Episode{{1, 1}, {1, 2}, {1, 3}}}, "Sherlock (2010) S01E01,S01E02,S01E03"},
+	}
+	for _, tt := range tests {
+		if got := tt.m.String(); got != tt.want {
+			t.Errorf("got %q, want %q", got, tt.want)
+		}
+	}
+}

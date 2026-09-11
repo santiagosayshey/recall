@@ -9,6 +9,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/santiagosayshey/recall/internal/decide"
 	"github.com/santiagosayshey/recall/internal/webhook"
 )
 
@@ -83,6 +84,18 @@ func TestLines(t *testing.T) {
 	}
 	if err := s.AddImport(imp(t, "radarr-import")); err != nil {
 		t.Fatal(err)
+	}
+	g0 := grab(t, "radarr-grab")
+	if err := s.AddDecision(decide.Decide(&g0, imp(t, "radarr-import"))); err != nil {
+		t.Fatal(err)
+	}
+
+	decisions := lines(t, filepath.Join(dir, decisionsFile))
+	if len(decisions) != 1 || decisions[0]["result"] != "drift" || decisions[0]["delta"] != float64(-1180999) || decisions[0]["at"] != "2026-09-11T17:39:29+09:30" {
+		t.Errorf("decision line: %v", decisions)
+	}
+	if _, ok := decisions[0]["raw"]; ok {
+		t.Error("a decision has no raw body")
 	}
 
 	grabs := lines(t, filepath.Join(dir, grabsFile))
@@ -172,10 +185,12 @@ func TestOpenErrors(t *testing.T) {
 	if _, err := Open(dir, Options{}); err == nil || !strings.Contains(err.Error(), "line 1") {
 		t.Errorf("corrupt grab file: %v", err)
 	}
-	dir = t.TempDir()
-	os.Mkdir(filepath.Join(dir, importsFile), 0o755)
-	if _, err := Open(dir, Options{}); err == nil {
-		t.Error("opened with a directory where the import file goes")
+	for _, name := range []string{importsFile, decisionsFile} {
+		dir = t.TempDir()
+		os.Mkdir(filepath.Join(dir, name), 0o755)
+		if _, err := Open(dir, Options{}); err == nil {
+			t.Errorf("opened with a directory where %s goes", name)
+		}
 	}
 }
 
@@ -186,6 +201,9 @@ func TestAppendAfterClose(t *testing.T) {
 		t.Error("appended to a closed store")
 	}
 	if err := s.AddImport(imp(t, "radarr-import")); err == nil {
+		t.Error("appended to a closed store")
+	}
+	if err := s.AddDecision(decide.Decision{}); err == nil {
 		t.Error("appended to a closed store")
 	}
 }

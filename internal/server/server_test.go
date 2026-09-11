@@ -2,6 +2,8 @@ package server
 
 import (
 	"bytes"
+	"encoding/json"
+	"log/slog"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -25,6 +27,7 @@ type harness struct {
 	*Server
 	dir   string
 	store *store.Store
+	log   *bytes.Buffer
 }
 
 func newHarness(t *testing.T) harness {
@@ -35,7 +38,14 @@ func newHarness(t *testing.T) harness {
 		t.Fatal(err)
 	}
 	t.Cleanup(func() { st.Close() })
-	return harness{New(Options{Store: st}), dir, st}
+	var log bytes.Buffer
+	logger := slog.New(slog.NewTextHandler(&log, &slog.HandlerOptions{ReplaceAttr: func(_ []string, a slog.Attr) slog.Attr {
+		if a.Key == slog.TimeKey {
+			return slog.Attr{}
+		}
+		return a
+	}}))
+	return harness{New(Options{Store: st, Logger: logger}), dir, st, &log}
 }
 
 func (h harness) request(method, path string, body []byte) *httptest.ResponseRecorder {
@@ -76,6 +86,34 @@ func TestWebhookStoresGrabsAndImports(t *testing.T) {
 	if g, ok := h.store.Grab("0000000000000000000000000000000000000001"); !ok || g.Score != 881400 {
 		t.Errorf("radarr grab not found: %v %d", ok, g.Score)
 	}
+	if got := h.lines(t, "decisions.jsonl"); got != 3 {
+		t.Errorf("%d decision lines, want 3", got)
+	}
+	raw, _ := os.ReadFile(filepath.Join(h.dir, "decisions.jsonl"))
+	var results []string
+	for _, line := range bytes.Split(bytes.TrimSpace(raw), []byte("\n")) {
+		var d struct{ Result string }
+		json.Unmarshal(line, &d)
+		results = append(results, d.Result)
+	}
+	if want := "drift clean clean"; strings.Join(results, " ") != want {
+		t.Errorf("decisions %v, want %s", results, want)
+	}
+
+	want := `level=INFO msg=decision result=drift instance=Radarr media="100% Wolf (2020)" release="100 Percent Wolf 2020 1080p BluRay DD5.1 x264-PTer" file="100 Percent Wolf.2020.1080p.BluRay.DD5.1.x264- PTer" grabScore=881400 importScore=-299599 delta=-1180999 lost="[1080p Quality Tier 5]" gained="[Release Group (Missing)]" path="/media/test-library/100% Wolf (2020) {tmdb-520946}/100% Wolf (2020) {tmdb-520946} [Bluray-1080p][AC3 5.1][x264].mkv" download=0000000000000000000000000000000000000001`
+	if !strings.Contains(h.log.String(), want+"\n") {
+		t.Errorf("drift line not logged as expected; log:\n%s", h.log.String())
+	}
+}
+
+func TestWebhookImportWithoutGrabIsUnmatched(t *testing.T) {
+	h := newHarness(t)
+	if rec := h.request(http.MethodPost, "/webhook", fixture(t, "sonarr-import-episode")); rec.Code != http.StatusAccepted {
+		t.Fatalf("got %d", rec.Code)
+	}
+	if !strings.Contains(h.log.String(), `msg=decision result=unmatched instance=Sonarr media="Sherlock (2010) S02E01"`) {
+		t.Errorf("log:\n%s", h.log.String())
+	}
 }
 
 func TestWebhookRejects(t *testing.T) {
@@ -104,7 +142,9 @@ func TestWebhookRejects(t *testing.T) {
 func TestWebhookStoreFailure(t *testing.T) {
 	h := newHarness(t)
 	h.store.Close() // every append now fails
-	if rec := h.request(http.MethodPost, "/webhook", fixture(t, "radarr-grab")); rec.Code != http.StatusInternalServerError {
-		t.Fatalf("got %d", rec.Code)
+	for _, name := range []string{"radarr-grab", "radarr-import"} {
+		if rec := h.request(http.MethodPost, "/webhook", fixture(t, name)); rec.Code != http.StatusInternalServerError {
+			t.Fatalf("%s: got %d", name, rec.Code)
+		}
 	}
 }
