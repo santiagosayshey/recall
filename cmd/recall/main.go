@@ -1,7 +1,6 @@
 // Command recall catches *arr imports that score lower than their grab. It
 // receives Radarr's and Sonarr's webhooks, keeps the grab and the import for
-// each download, and logs a decision for every import so a log watcher can
-// page on drift.
+// each download, and logs a decision for every import.
 package main
 
 import (
