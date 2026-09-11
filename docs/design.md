@@ -53,4 +53,3 @@ Three append-only JSON Lines files: grabs, imports, decisions. Each line is the 
 3. **Store.** Grabs and imports appended to files; the grab map rebuilt at start.
 4. **Decide.** Import compared with grab; the decision appended and logged.
 5. **Register.** Recall creates its own connection on each instance, with a shared secret it checks on every event.
-6. **Status.** Decisions marked fixed, accepted, or superseded; grabs with no import as a query.
