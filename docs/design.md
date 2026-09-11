@@ -26,7 +26,7 @@ formats   1080p Bluray, Dolby Digital, Release Group (Missing)
 score     -299599
 ```
 
-Same download, same file, two scores over a million apart. Radarr keeps the second one. On the next search a HANDJOB release at +880000 beat the file on disk, and Radarr replaced a good copy with a worse one.
+The file on disk now carries the import score, -299599, and the grab score is forgotten. On the next search a HANDJOB release scoring +880000 looked like an upgrade, and Radarr replaced a good copy with a worse one.
 
 Nothing in either app compares the two scores, and no log line shows them together. Both apps do send a webhook at grab and at import, and each carries the download id and that event's score.
 
