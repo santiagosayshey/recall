@@ -14,7 +14,7 @@ Recall receives both apps' webhooks, keeps the grab and the import for each down
 
 ## Getting started
 
-Recall is one container. Give it a config file naming your Radarr and Sonarr instances and it registers its own webhook connection on each of them at start. Every event the apps send carries a secret header that Recall checks.
+Recall runs as one container. A config file lists your Radarr and Sonarr instances. On start, Recall adds a webhook connection to each one that points back at itself. The connection sends a secret header with every event, and Recall checks it.
 
 ### Requirements
 
