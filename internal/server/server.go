@@ -4,10 +4,13 @@
 package server
 
 import (
-	"encoding/json"
+	"errors"
 	"io"
 	"log/slog"
 	"net/http"
+
+	"github.com/santiagosayshey/recall/internal/store"
+	"github.com/santiagosayshey/recall/internal/webhook"
 )
 
 // maxBody bounds a webhook body. The largest seen so far is a few
@@ -16,17 +19,19 @@ const maxBody = 1 << 20
 
 type Options struct {
 	Logger *slog.Logger
+	Store  *store.Store
 }
 
 type Server struct {
-	log *slog.Logger
-	mux *http.ServeMux
+	log   *slog.Logger
+	store *store.Store
+	mux   *http.ServeMux
 }
 
-// New returns the handler. It accepts every webhook and logs it; storing and
-// deciding come in later milestones.
+// New returns the handler. Grabs and imports go to the store; everything
+// else is logged and dropped.
 func New(o Options) *Server {
-	s := &Server{log: o.Logger, mux: http.NewServeMux()}
+	s := &Server{log: o.Logger, store: o.Store, mux: http.NewServeMux()}
 	if s.log == nil {
 		s.log = slog.New(slog.DiscardHandler)
 	}
@@ -44,23 +49,31 @@ func (s *Server) health(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "ok\n")
 }
 
-// envelope is the little every *arr webhook shares.
-type envelope struct {
-	EventType    string `json:"eventType"`
-	InstanceName string `json:"instanceName"`
-}
-
 func (s *Server) webhook(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(http.MaxBytesReader(w, r.Body, maxBody))
 	if err != nil {
 		http.Error(w, "body too large or unreadable", http.StatusRequestEntityTooLarge)
 		return
 	}
-	var e envelope
-	if err := json.Unmarshal(body, &e); err != nil || e.EventType == "" {
-		http.Error(w, "not an *arr webhook", http.StatusBadRequest)
+	ev, err := webhook.Parse(body)
+	if errors.Is(err, webhook.ErrNotWebhook) {
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	s.log.Info("webhook", "event", e.EventType, "instance", e.InstanceName, "bytes", len(body))
+	switch e := ev.(type) {
+	case *webhook.Grab:
+		err = s.store.AddGrab(*e)
+		s.log.Info("grab", "instance", e.Instance, "download", e.DownloadID, "title", e.ReleaseTitle, "score", e.Score)
+	case *webhook.Import:
+		err = s.store.AddImport(*e)
+		s.log.Info("import", "instance", e.Instance, "download", e.DownloadID, "file", e.FileName, "score", e.Score)
+	case *webhook.Other:
+		s.log.Info("ignored", "instance", e.Instance, "event", e.EventType)
+	}
+	if err != nil {
+		s.log.Error("store", "err", err)
+		http.Error(w, "could not store the event", http.StatusInternalServerError)
+		return
+	}
 	w.WriteHeader(http.StatusAccepted)
 }

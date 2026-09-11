@@ -31,51 +31,52 @@ type Other struct {
 	Header
 }
 
-// Header is what every body carries.
+// Header is what every body carries. The JSON names are the ones the store
+// writes; Raw is left to the store so it can go last on the line.
 type Header struct {
-	App        App
-	Instance   string
-	EventType  string // the app's own name for the event
-	DownloadID string
-	Media      Media
-	Raw        json.RawMessage // the body as received
+	App        App             `json:"app"`
+	Instance   string          `json:"instance"`
+	EventType  string          `json:"eventType"` // the app's own name for the event
+	DownloadID string          `json:"downloadId"`
+	Media      Media           `json:"media"`
+	Raw        json.RawMessage `json:"-"` // the body as received
 }
 
 // Grab is a release the app chose, scored against the indexer's title.
 type Grab struct {
 	Header
-	ReleaseTitle string
-	Group        string // release group, when parsed
-	Quality      string // for example Bluray-1080p
-	Score        int
-	Formats      []string // custom format names, in the app's order
+	ReleaseTitle string   `json:"releaseTitle"`
+	Group        string   `json:"group,omitempty"` // release group, when parsed
+	Quality      string   `json:"quality"`         // for example Bluray-1080p
+	Score        int      `json:"score"`
+	Formats      []string `json:"formats"` // custom format names, in the app's order
 }
 
 // Import is a file the app took into the library, scored against the file.
 type Import struct {
 	Header
-	ReleaseTitle string // the indexer's title, again
-	FileName     string // the name the file was scored as, when the app says
-	Path         string // where the file landed
-	Group        string // release group, when parsed
-	Quality      string // for example Bluray-1080p
-	Score        int
-	Formats      []string // custom format names, in the app's order
-	IsUpgrade    bool
+	ReleaseTitle string   `json:"releaseTitle"`    // the indexer's title, again
+	FileName     string   `json:"fileName"`        // the name the file was scored as, when the app says
+	Path         string   `json:"path"`            // where the file landed
+	Group        string   `json:"group,omitempty"` // release group, when parsed
+	Quality      string   `json:"quality"`         // for example Bluray-1080p
+	Score        int      `json:"score"`
+	Formats      []string `json:"formats"` // custom format names, in the app's order
+	IsUpgrade    bool     `json:"isUpgrade"`
 }
 
 // Media is the movie or the episodes the event is about, flattened so both
 // apps look alike.
 type Media struct {
-	ID       int // the app's own id for the movie or series
-	Title    string
-	Year     int
-	Episodes []Episode // Sonarr only
+	ID       int       `json:"id"` // the app's own id for the movie or series
+	Title    string    `json:"title"`
+	Year     int       `json:"year"`
+	Episodes []Episode `json:"episodes,omitempty"` // Sonarr only
 }
 
 type Episode struct {
-	Season int
-	Number int
+	Season int `json:"season"`
+	Number int `json:"number"`
 }
 
 func (h Header) header() Header { return h }
