@@ -1,6 +1,6 @@
 # Recall
 
-**Catches *arr imports that score lower than their grab.**
+**Catches \*arr imports that score lower than their grab.**
 
 [![ci](https://img.shields.io/github/actions/workflow/status/santiagosayshey/recall/ci.yml?branch=develop&label=ci&logo=githubactions&logoColor=white)](https://github.com/santiagosayshey/recall/actions/workflows/ci.yml)
 [![release](https://img.shields.io/github/v/release/santiagosayshey/recall?label=release&logo=github&logoColor=white)](https://github.com/santiagosayshey/recall/releases)
