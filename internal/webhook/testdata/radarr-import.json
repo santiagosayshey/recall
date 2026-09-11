@@ -1,0 +1,105 @@
+{
+  "movie": {
+    "id": 11,
+    "title": "100% Wolf",
+    "year": 2020,
+    "releaseDate": "2020-07-15",
+    "folderPath": "/media/test-library/100% Wolf (2020) {tmdb-520946}",
+    "tmdbId": 520946,
+    "imdbId": "tt8774798",
+    "overview": "Freddy Lupin, heir to a proud family line of werewolves, is in for a shock when on his 14th birthday his first 'warfing' goes awry, turning him into a ferocious poodle.  The pack elders give Freddy until the next moonrise to prove he has the heart of a wolf, or risk being cast out forever.  With the help of an unlikely ally in a streetwise stray named Batty, Freddy must prove he's 100% Wolf.",
+    "genres": [
+      "Animation",
+      "Family",
+      "Fantasy",
+      "Adventure"
+    ],
+    "images": [
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/11/poster.jpg?lastWrite=639247106358928149",
+        "remoteUrl": "https://image.tmdb.org/t/p/original/2VrvxK4yxNCU6KVgo5TADJeBEQu.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/11/fanart.jpg?lastWrite=639247106368368557",
+        "remoteUrl": "https://image.tmdb.org/t/p/original/7TxeZVg2evMG42p0uSbMJpWNQ8A.jpg"
+      }
+    ],
+    "tags": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    }
+  },
+  "remoteMovie": {
+    "tmdbId": 520946,
+    "imdbId": "tt8774798",
+    "title": "100% Wolf",
+    "year": 2020
+  },
+  "movieFile": {
+    "id": 14,
+    "relativePath": "100% Wolf (2020) {tmdb-520946} [Bluray-1080p][AC3 5.1][x264].mkv",
+    "path": "/media/test-library/100% Wolf (2020) {tmdb-520946}/100% Wolf (2020) {tmdb-520946} [Bluray-1080p][AC3 5.1][x264].mkv",
+    "quality": "Bluray-1080p",
+    "qualityVersion": 1,
+    "sceneName": "100 Percent Wolf.2020.1080p.BluRay.DD5.1.x264- PTer",
+    "indexerFlags": "0",
+    "size": 9194840771,
+    "dateAdded": "2026-09-11T08:17:50.4984468Z",
+    "languages": [
+      {
+        "id": 1,
+        "name": "English"
+      }
+    ],
+    "mediaInfo": {
+      "audioChannels": 5.1,
+      "audioCodec": "AC3",
+      "audioLanguages": [
+        "eng"
+      ],
+      "height": 1036,
+      "width": 1920,
+      "subtitles": [
+        "eng",
+        "chi"
+      ],
+      "videoCodec": "x264",
+      "videoDynamicRange": "",
+      "videoDynamicRangeType": ""
+    },
+    "sourcePath": "/media/downloads/100 Percent Wolf.2020.1080p.BluRay.DD5.1.x264- PTer.mkv"
+  },
+  "isUpgrade": false,
+  "downloadClient": "qBittorrent",
+  "downloadClientType": "qBittorrent",
+  "downloadId": "0000000000000000000000000000000000000001",
+  "customFormatInfo": {
+    "customFormats": [
+      {
+        "id": 1328,
+        "name": "1080p Bluray"
+      },
+      {
+        "id": 1116,
+        "name": "Dolby Digital"
+      },
+      {
+        "id": 1141,
+        "name": "Release Group (Missing)"
+      }
+    ],
+    "customFormatScore": -299599
+  },
+  "release": {
+    "releaseTitle": "100 Percent Wolf 2020 1080p BluRay DD5.1 x264-PTer",
+    "indexer": "Indexer (Prowlarr)",
+    "size": 9194840771,
+    "indexerFlags": []
+  },
+  "eventType": "Download",
+  "instanceName": "Radarr",
+  "applicationUrl": ""
+}

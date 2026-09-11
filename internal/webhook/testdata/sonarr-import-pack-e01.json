@@ -1,0 +1,189 @@
+{
+  "series": {
+    "id": 6,
+    "title": "Sherlock",
+    "titleSlug": "sherlock",
+    "path": "/media/test-library/Sherlock (2010) {tvdb-176941}",
+    "tvdbId": 176941,
+    "tvMazeId": 335,
+    "tmdbId": 19885,
+    "imdbId": "tt1475582",
+    "type": "standard",
+    "year": 2010,
+    "genres": [
+      "Crime",
+      "Drama",
+      "Mystery",
+      "Suspense",
+      "Thriller"
+    ],
+    "images": [
+      {
+        "coverType": "banner",
+        "url": "/MediaCover/6/banner.jpg?lastWrite=639247140191039119",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/graphical/176941-g.jpg"
+      },
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/6/poster.jpg?lastWrite=639247140191459138",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/posters/176941-17.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/6/fanart.jpg?lastWrite=639247140191899158",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/fanart/original/176941-41.jpg"
+      },
+      {
+        "coverType": "clearlogo",
+        "url": "/MediaCover/6/clearlogo.png?lastWrite=639247140192299176",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/176941/clearlogo/611b5c26c7950.png"
+      }
+    ],
+    "tags": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    }
+  },
+  "episodes": [
+    {
+      "id": 97,
+      "episodeNumber": 1,
+      "seasonNumber": 1,
+      "title": "A Study in Pink",
+      "overview": "A war hero, invalided home from Afghanistan, meets a strange but charismatic genius who is looking for a flatmate - it is London in 2010, and Dr Watson and Sherlock Holmes are meeting for the first time. A string of impossible suicides has Scotland Yard baffled - and only one man can help.",
+      "airDate": "2010-07-25",
+      "airDateUtc": "2010-07-25T20:00:00Z",
+      "seriesId": 6,
+      "tvdbId": 2502511
+    }
+  ],
+  "episodeFile": {
+    "id": 81,
+    "relativePath": "Season 01/Sherlock (2010) - S01E01 - A Study in Pink [AMZN][WEBDL-1080p][EAC3 5.1][h265]-HONE.mkv",
+    "path": "/media/test-library/Sherlock (2010) {tvdb-176941}/Season 01/Sherlock (2010) - S01E01 - A Study in Pink [AMZN][WEBDL-1080p][EAC3 5.1][h265]-HONE.mkv",
+    "quality": "WEBDL-1080p",
+    "qualityVersion": 1,
+    "releaseGroup": "HONE",
+    "size": 3989754090,
+    "dateAdded": "2026-09-11T09:16:22.5750091Z",
+    "languages": [
+      {
+        "id": 1,
+        "name": "English"
+      }
+    ],
+    "mediaInfo": {
+      "audioChannels": 5.1,
+      "audioCodec": "EAC3",
+      "audioLanguages": [
+        "eng"
+      ],
+      "height": 1080,
+      "width": 1920,
+      "subtitles": [
+        "eng",
+        "ara",
+        "cze",
+        "dan",
+        "ger",
+        "gre",
+        "spa",
+        "fin",
+        "fre",
+        "heb",
+        "hin",
+        "hun",
+        "ind",
+        "ita",
+        "jpn",
+        "kor",
+        "may",
+        "nob",
+        "dut",
+        "pol",
+        "por",
+        "rum",
+        "rus",
+        "swe",
+        "swa",
+        "tam",
+        "tel",
+        "tha",
+        "tur",
+        "vie",
+        "chi"
+      ],
+      "videoCodec": "h265",
+      "videoDynamicRange": "",
+      "videoDynamicRangeType": ""
+    },
+    "sourcePath": "/media/downloads/Sherlock (2010) S01 (1080p AMZN WEB-DL H265 SDR DDP 5.1 English - HONE)/Sherlock (2010) S01E01 (1080p AMZN WEB-DL H265 SDR DDP 5.1 English - HONE).mkv"
+  },
+  "isUpgrade": false,
+  "downloadClient": "qBittorrent",
+  "downloadClientType": "qBittorrent",
+  "downloadId": "0000000000000000000000000000000000000004",
+  "customFormatInfo": {
+    "customFormats": [
+      {
+        "id": 7,
+        "name": "1080p WEB-DL"
+      },
+      {
+        "id": 141,
+        "name": "1080p WEB-DL HEVC Tier 1"
+      },
+      {
+        "id": 271,
+        "name": "5.1"
+      },
+      {
+        "id": 176,
+        "name": "Amazon Enhancement"
+      },
+      {
+        "id": 34,
+        "name": "AMZN"
+      },
+      {
+        "id": 54,
+        "name": "Dolby Digital +"
+      },
+      {
+        "id": 98,
+        "name": "h265"
+      },
+      {
+        "id": 88,
+        "name": "Season Pack"
+      },
+      {
+        "id": 237,
+        "name": "WEB Tier 01"
+      },
+      {
+        "id": 93,
+        "name": "WEB-DL Tier 2"
+      },
+      {
+        "id": 240,
+        "name": "x265 (HD)"
+      },
+      {
+        "id": 241,
+        "name": "x265 (no HDR/DV)"
+      }
+    ],
+    "customFormatScore": 923690
+  },
+  "release": {
+    "releaseTitle": "Sherlock (2010) S01 (1080p AMZN WEB-DL H265 SDR DDP 5 1 English - HONE)",
+    "indexer": "Indexer (Prowlarr)",
+    "size": 11478400949,
+    "releaseType": "seasonPack"
+  },
+  "eventType": "Download",
+  "instanceName": "Sonarr",
+  "applicationUrl": ""
+}
