@@ -15,9 +15,6 @@ import (
 const module = "github.com/santiagosayshey/recall/"
 
 // rules maps a package (relative to the module) to the packages it must not
-// import (also relative), with the reason shown in the report.
-
-// rules maps a package (relative to the module) to the packages it must not
 // import (also relative), with the reason shown in the report. Only
 // internal/server may import everything; the rest point downward.
 var rules = map[string][]forbidden{
@@ -27,15 +24,11 @@ var rules = map[string][]forbidden{
 	"internal/decide": {
 		{"internal/", "a decision is pure: it compares two records and touches nothing"},
 	},
-	"internal/ntfy": {
-		{"internal/", "the ntfy client depends on nothing of ours"},
-	},
 	"internal/arr": {
 		{"internal/", "the *arr client depends on nothing of ours"},
 	},
 	"internal/store": {
 		{"internal/server", "the store does not know about HTTP"},
-		{"internal/ntfy", "the store does not alert"},
 		{"internal/arr", "the store does not talk to the *arr apps"},
 	},
 }

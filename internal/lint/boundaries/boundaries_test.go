@@ -24,14 +24,12 @@ func TestBoundaries(t *testing.T) {
 		{"internal/webhook", []string{"github.com/santiagosayshey/recall/internal/webhook/webhooktest"}, 0},
 		{"internal/decide", []string{"github.com/santiagosayshey/recall/internal/store"}, 1},
 		{"internal/decide", []string{"github.com/santiagosayshey/recall/internal/webhook"}, 1},
-		{"internal/ntfy", []string{"github.com/santiagosayshey/recall/internal/decide"}, 1},
 		{"internal/arr", []string{"github.com/santiagosayshey/recall/internal/store"}, 1},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/webhook"}, 0},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/decide"}, 0},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/server"}, 1},
-		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/ntfy"}, 1},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/arr"}, 1},
-		{"internal/server", []string{"github.com/santiagosayshey/recall/internal/store", "github.com/santiagosayshey/recall/internal/ntfy", "github.com/santiagosayshey/recall/internal/decide"}, 0},
+		{"internal/server", []string{"github.com/santiagosayshey/recall/internal/store", "github.com/santiagosayshey/recall/internal/decide"}, 0},
 		{"cmd/recall", []string{"github.com/santiagosayshey/recall/internal/server"}, 0},
 	}
 	for _, c := range cases {

@@ -1,6 +1,7 @@
-// Command recall catches *arr imports that score lower than
-// their grab. It receives both apps' webhooks, keeps the grab and import
-// scores for each download, and pages ntfy when they disagree.
+// Command recall catches *arr imports that score lower than their grab. It
+// receives Radarr's and Sonarr's webhooks, keeps the grab and the import for
+// each download, and logs a decision for every import so a log watcher can
+// page on drift.
 package main
 
 import (
@@ -13,7 +14,7 @@ var version = "dev"
 
 const usage = `usage: recall <command> [flags]
 
-  serve     receive webhooks and alert on drift
+  serve     receive webhooks and log a decision for every import
   version   print the version
 `
 
