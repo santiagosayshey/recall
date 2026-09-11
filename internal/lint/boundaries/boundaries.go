@@ -26,6 +26,9 @@ var rules = map[string][]forbidden{
 		{"internal/server", "a decision is pure: it compares two records and touches nothing"},
 		{"internal/arr", "a decision is pure: it compares two records and touches nothing"},
 	},
+	"internal/config": {
+		{"internal/", "the configuration depends on nothing of ours"},
+	},
 	"internal/arr": {
 		{"internal/", "the *arr client depends on nothing of ours"},
 	},

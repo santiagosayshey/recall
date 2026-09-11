@@ -148,3 +148,36 @@ func TestWebhookStoreFailure(t *testing.T) {
 		}
 	}
 }
+
+func TestWebhookSecret(t *testing.T) {
+	h := newHarness(t)
+	h.Server = New(Options{Store: h.store, Logger: h.Server.log, Secret: "s3cret"})
+	post := func(secret string) int {
+		rec := httptest.NewRecorder()
+		req := httptest.NewRequest(http.MethodPost, "/webhook", bytes.NewReader(fixture(t, "radarr-grab")))
+		if secret != "" {
+			req.Header.Set("X-Recall-Secret", secret)
+		}
+		h.ServeHTTP(rec, req)
+		return rec.Code
+	}
+	if got := post(""); got != http.StatusUnauthorized {
+		t.Errorf("no header: %d", got)
+	}
+	if got := post("wrong"); got != http.StatusUnauthorized {
+		t.Errorf("wrong header: %d", got)
+	}
+	if got := h.lines(t, "grabs.jsonl"); got != 0 {
+		t.Errorf("%d grabs stored from refused requests", got)
+	}
+	if !strings.Contains(h.log.String(), "level=WARN msg=refused") {
+		t.Errorf("log:\n%s", h.log.String())
+	}
+	if got := post("s3cret"); got != http.StatusAccepted {
+		t.Errorf("right header: %d", got)
+	}
+	// Health needs no secret; it is for the orchestrator, not the apps.
+	if rec := h.request(http.MethodGet, "/healthz", nil); rec.Code != http.StatusOK {
+		t.Errorf("health: %d", rec.Code)
+	}
+}

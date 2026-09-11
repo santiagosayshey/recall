@@ -26,6 +26,8 @@ func TestBoundaries(t *testing.T) {
 		{"internal/decide", []string{"github.com/santiagosayshey/recall/internal/webhook"}, 0},
 		{"internal/decide", []string{"github.com/santiagosayshey/recall/internal/server"}, 1},
 		{"internal/arr", []string{"github.com/santiagosayshey/recall/internal/store"}, 1},
+		{"internal/config", []string{"github.com/santiagosayshey/recall/internal/webhook"}, 1},
+		{"internal/config", []string{"gopkg.in/yaml.v3"}, 0},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/webhook"}, 0},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/decide"}, 0},
 		{"internal/store", []string{"github.com/santiagosayshey/recall/internal/server"}, 1},
