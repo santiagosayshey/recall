@@ -31,7 +31,7 @@ services:
     container_name: recall
     restart: unless-stopped
     environment:
-      TZ: Australia/Adelaide
+      TZ: Etc/UTC   # timestamps in the files and the log
       RECALL_SECRET: ${RECALL_SECRET}
       RADARR_API_KEY: ${RADARR_API_KEY}
       SONARR_API_KEY: ${SONARR_API_KEY}
