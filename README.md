@@ -46,7 +46,7 @@ Recall must be reachable from the apps at the URL in the config, and it must rea
 
 ### Configuration
 
-`config.yml`, mounted at `/config/config.yml`. Values may reference environment variables as `${NAME}`, so the file can be tracked and the keys kept out of it.
+Values may reference environment variables as `${NAME}`, so the file can be tracked and the keys kept out of it.
 
 ```yaml
 # Where the apps post. Recall listens on 8471; the host is whatever the
