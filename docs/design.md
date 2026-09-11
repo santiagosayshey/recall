@@ -2,7 +2,7 @@
 
 ## Problem
 
-Radarr and Sonarr score a release twice: at grab against the indexer's title, at import against the torrent's own name. When the names differ the file can land far below the score it was chosen at, and the next search replaces it with something worse. Upstream: [Radarr #11422](https://github.com/Radarr/Radarr/issues/11422).
+Radarr and Sonarr score a release twice: at grab against the indexer's title, at import against the torrent's own name. When the names differ the file can land far below the score it was chosen at, and the next search replaces it with something worse.
 
 Example: a PTer 1080p grabbed at +881400, imported at -299599 because the torrent name had `x264- PTer` and the group parsed as empty, then replaced by a release at +880000.
 
