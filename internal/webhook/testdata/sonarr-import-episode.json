@@ -1,0 +1,156 @@
+{
+  "series": {
+    "id": 6,
+    "title": "Sherlock",
+    "titleSlug": "sherlock",
+    "path": "/media/test-library/Sherlock (2010) {tvdb-176941}",
+    "tvdbId": 176941,
+    "tvMazeId": 335,
+    "tmdbId": 19885,
+    "imdbId": "tt1475582",
+    "type": "standard",
+    "year": 2010,
+    "genres": [
+      "Crime",
+      "Drama",
+      "Mystery",
+      "Suspense",
+      "Thriller"
+    ],
+    "images": [
+      {
+        "coverType": "banner",
+        "url": "/MediaCover/6/banner.jpg?lastWrite=639247140191039119",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/graphical/176941-g.jpg"
+      },
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/6/poster.jpg?lastWrite=639247140191459138",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/posters/176941-17.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/6/fanart.jpg?lastWrite=639247140191899158",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/fanart/original/176941-41.jpg"
+      },
+      {
+        "coverType": "clearlogo",
+        "url": "/MediaCover/6/clearlogo.png?lastWrite=639247140192299176",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/176941/clearlogo/611b5c26c7950.png"
+      }
+    ],
+    "tags": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    }
+  },
+  "episodes": [
+    {
+      "id": 100,
+      "episodeNumber": 1,
+      "seasonNumber": 2,
+      "title": "A Scandal in Belgravia",
+      "overview": "Compromising photographs threaten the monarchy, but for Sherlock and John the game is on in more ways than one.",
+      "airDate": "2012-01-01",
+      "airDateUtc": "2012-01-01T21:00:00Z",
+      "seriesId": 6,
+      "tvdbId": 4103396
+    }
+  ],
+  "episodeFile": {
+    "id": 84,
+    "relativePath": "Season 02/Sherlock (2010) - S02E01 - A Scandal in Belgravia [NF][WEBDL-1080p][EAC3 5.1][x264]-playWEB.mkv",
+    "path": "/media/test-library/Sherlock (2010) {tvdb-176941}/Season 02/Sherlock (2010) - S02E01 - A Scandal in Belgravia [NF][WEBDL-1080p][EAC3 5.1][x264]-playWEB.mkv",
+    "quality": "WEBDL-1080p",
+    "qualityVersion": 1,
+    "releaseGroup": "playWEB",
+    "sceneName": "Sherlock S02E01 A Scandal in Belgravia 1080p NF WEB-DL DD 5 1 H 264-playWEB",
+    "size": 3793703410,
+    "dateAdded": "2026-09-11T09:16:23.0266391Z",
+    "languages": [
+      {
+        "id": 1,
+        "name": "English"
+      }
+    ],
+    "mediaInfo": {
+      "audioChannels": 5.1,
+      "audioCodec": "EAC3",
+      "audioLanguages": [
+        "eng"
+      ],
+      "height": 1080,
+      "width": 1920,
+      "subtitles": [
+        "eng",
+        "gre",
+        "hun",
+        "pol",
+        "rum"
+      ],
+      "videoCodec": "x264",
+      "videoDynamicRange": "",
+      "videoDynamicRangeType": ""
+    },
+    "sourcePath": "/media/downloads/Sherlock S02E01 A Scandal in Belgravia 1080p NF WEB-DL DD 5 1 H 264-playWEB/Sherlock S02E01 A Scandal in Belgravia 1080p NF WEB-DL DD 5 1 H 264-playWEB.mkv"
+  },
+  "isUpgrade": false,
+  "downloadClient": "qBittorrent",
+  "downloadClientType": "qBittorrent",
+  "downloadId": "0000000000000000000000000000000000000003",
+  "customFormatInfo": {
+    "customFormats": [
+      {
+        "id": 7,
+        "name": "1080p WEB-DL"
+      },
+      {
+        "id": 299,
+        "name": "1080p WEB-DL (Efficient)"
+      },
+      {
+        "id": 115,
+        "name": "1080p WEB-DL (h264)"
+      },
+      {
+        "id": 271,
+        "name": "5.1"
+      },
+      {
+        "id": 207,
+        "name": "Anime Web Tier 05"
+      },
+      {
+        "id": 262,
+        "name": "Anime WEB Tier 05"
+      },
+      {
+        "id": 53,
+        "name": "Dolby Digital"
+      },
+      {
+        "id": 69,
+        "name": "NF"
+      },
+      {
+        "id": 238,
+        "name": "WEB Tier 02"
+      },
+      {
+        "id": 93,
+        "name": "WEB-DL Tier 2"
+      }
+    ],
+    "customFormatScore": 861480
+  },
+  "release": {
+    "releaseTitle": "Sherlock S02E01 A Scandal in Belgravia 1080p NF WEB-DL DD 5 1 H 264-playWEB",
+    "indexer": "Indexer (Prowlarr)",
+    "size": 3790308638,
+    "releaseType": "singleEpisode"
+  },
+  "eventType": "Download",
+  "instanceName": "Sonarr",
+  "applicationUrl": ""
+}

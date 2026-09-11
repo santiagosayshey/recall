@@ -1,0 +1,135 @@
+{
+  "series": {
+    "id": 6,
+    "title": "Sherlock",
+    "titleSlug": "sherlock",
+    "path": "/media/test-library/Sherlock (2010) {tvdb-176941}",
+    "tvdbId": 176941,
+    "tvMazeId": 335,
+    "tmdbId": 19885,
+    "imdbId": "tt1475582",
+    "type": "standard",
+    "year": 2010,
+    "genres": [
+      "Crime",
+      "Drama",
+      "Mystery",
+      "Suspense",
+      "Thriller"
+    ],
+    "images": [
+      {
+        "coverType": "banner",
+        "url": "/MediaCover/6/banner.jpg?lastWrite=639247140191039119",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/graphical/176941-g.jpg"
+      },
+      {
+        "coverType": "poster",
+        "url": "/MediaCover/6/poster.jpg?lastWrite=639247140191459138",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/posters/176941-17.jpg"
+      },
+      {
+        "coverType": "fanart",
+        "url": "/MediaCover/6/fanart.jpg?lastWrite=639247140191899158",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/fanart/original/176941-41.jpg"
+      },
+      {
+        "coverType": "clearlogo",
+        "url": "/MediaCover/6/clearlogo.png?lastWrite=639247140192299176",
+        "remoteUrl": "https://artworks.thetvdb.com/banners/v4/series/176941/clearlogo/611b5c26c7950.png"
+      }
+    ],
+    "tags": [],
+    "originalLanguage": {
+      "id": 1,
+      "name": "English"
+    }
+  },
+  "episodes": [
+    {
+      "id": 97,
+      "episodeNumber": 1,
+      "seasonNumber": 1,
+      "title": "A Study in Pink",
+      "overview": "A war hero, invalided home from Afghanistan, meets a strange but charismatic genius who is looking for a flatmate - it is London in 2010, and Dr Watson and Sherlock Holmes are meeting for the first time. A string of impossible suicides has Scotland Yard baffled - and only one man can help.",
+      "airDate": "2010-07-25",
+      "airDateUtc": "2010-07-25T20:00:00Z",
+      "seriesId": 6,
+      "tvdbId": 2502511
+    },
+    {
+      "id": 98,
+      "episodeNumber": 2,
+      "seasonNumber": 1,
+      "title": "The Blind Banker",
+      "overview": "A mysterious cipher is being scrawled on walls around London, and the first person to see it dies within hours of reading it. Can Sherlock and John solve the case?",
+      "airDate": "2010-08-01",
+      "airDateUtc": "2010-08-01T20:00:00Z",
+      "seriesId": 6,
+      "tvdbId": 2502521
+    },
+    {
+      "id": 99,
+      "episodeNumber": 3,
+      "seasonNumber": 1,
+      "title": "The Great Game",
+      "overview": "A strange clue in an empty room, a blood-soaked car, a priceless Old Master, a deranged bomber. With the clock ticking, the curtain rises on a battle of wits between Sherlock, John and the shadowy stranger who seems to know all the answers...",
+      "airDate": "2010-08-08",
+      "airDateUtc": "2010-08-08T20:00:00Z",
+      "seriesId": 6,
+      "tvdbId": 2502531
+    }
+  ],
+  "release": {
+    "quality": "Bluray-720p",
+    "qualityVersion": 1,
+    "releaseTitle": "Sherlock S01 Complete 720p BRRip x264 AAC - M@X",
+    "indexer": "Indexer (Prowlarr)",
+    "size": 3199750635,
+    "customFormatScore": 540210,
+    "customFormats": [
+      "720p Bluray",
+      "AAC",
+      "Group Missing",
+      "Release Group (Missing)",
+      "Season Pack"
+    ],
+    "languages": [
+      {
+        "id": 1,
+        "name": "English"
+      }
+    ]
+  },
+  "downloadClient": "qBittorrent",
+  "downloadClientType": "qBittorrent",
+  "downloadId": "0000000000000000000000000000000000000002",
+  "customFormatInfo": {
+    "customFormats": [
+      {
+        "id": 21,
+        "name": "720p Bluray"
+      },
+      {
+        "id": 33,
+        "name": "AAC"
+      },
+      {
+        "id": 273,
+        "name": "Group Missing"
+      },
+      {
+        "id": 78,
+        "name": "Release Group (Missing)"
+      },
+      {
+        "id": 88,
+        "name": "Season Pack"
+      }
+    ],
+    "customFormatScore": 540210
+  },
+  "eventType": "Grab",
+  "instanceName": "Sonarr",
+  "applicationUrl": ""
+}
