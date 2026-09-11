@@ -32,6 +32,11 @@ var rules = map[string][]forbidden{
 	"internal/arr": {
 		{"internal/", "the *arr client depends on nothing of ours"},
 	},
+	"internal/register": {
+		{"internal/store", "registering touches the apps, never the files"},
+		{"internal/server", "registering touches the apps, never HTTP in"},
+		{"internal/webhook", "registering does not read events"},
+	},
 	"internal/store": {
 		{"internal/server", "the store does not know about HTTP"},
 		{"internal/arr", "the store does not talk to the *arr apps"},
