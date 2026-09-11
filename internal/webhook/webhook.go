@@ -6,6 +6,7 @@ package webhook
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"path"
 )
 
@@ -80,6 +81,21 @@ type Episode struct {
 }
 
 func (h Header) header() Header { return h }
+
+// String is the media as a person would name it: "100% Wolf (2020)" or
+// "Sherlock (2010) S01E02", with every episode listed for a pack.
+func (m Media) String() string {
+	s := fmt.Sprintf("%s (%d)", m.Title, m.Year)
+	for i, ep := range m.Episodes {
+		if i == 0 {
+			s += " "
+		} else {
+			s += ","
+		}
+		s += fmt.Sprintf("S%02dE%02d", ep.Season, ep.Number)
+	}
+	return s
+}
 
 // body is the union of what Radarr and Sonarr send. Pointers tell presence
 // apart from emptiness, which is how the shapes are told apart.

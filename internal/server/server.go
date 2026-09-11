@@ -9,6 +9,7 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/santiagosayshey/recall/internal/decide"
 	"github.com/santiagosayshey/recall/internal/store"
 	"github.com/santiagosayshey/recall/internal/webhook"
 )
@@ -28,8 +29,9 @@ type Server struct {
 	mux   *http.ServeMux
 }
 
-// New returns the handler. Grabs and imports go to the store; everything
-// else is logged and dropped.
+// New returns the handler. A grab goes to the store. An import goes to the
+// store, is weighed against its grab, and the decision goes to the store
+// and to the log. Everything else is logged and dropped.
 func New(o Options) *Server {
 	s := &Server{log: o.Logger, store: o.Store, mux: http.NewServeMux()}
 	if s.log == nil {
@@ -63,10 +65,9 @@ func (s *Server) webhook(w http.ResponseWriter, r *http.Request) {
 	switch e := ev.(type) {
 	case *webhook.Grab:
 		err = s.store.AddGrab(*e)
-		s.log.Info("grab", "instance", e.Instance, "download", e.DownloadID, "title", e.ReleaseTitle, "score", e.Score)
+		s.log.Info("grab", "instance", e.Instance, "media", e.Media.String(), "release", e.ReleaseTitle, "score", e.Score, "download", e.DownloadID)
 	case *webhook.Import:
-		err = s.store.AddImport(*e)
-		s.log.Info("import", "instance", e.Instance, "download", e.DownloadID, "file", e.FileName, "score", e.Score)
+		err = s.imported(*e)
 	case *webhook.Other:
 		s.log.Info("ignored", "instance", e.Instance, "event", e.EventType)
 	}
@@ -76,4 +77,36 @@ func (s *Server) webhook(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusAccepted)
+}
+
+// imported stores the import, decides it against its grab, stores the
+// decision, and logs it. The log line is the alert: result first so a
+// watcher can match on it, then everything a person needs to act.
+func (s *Server) imported(i webhook.Import) error {
+	if err := s.store.AddImport(i); err != nil {
+		return err
+	}
+	var grab *webhook.Grab
+	if g, ok := s.store.Grab(i.DownloadID); ok {
+		grab = &g
+	}
+	d := decide.Decide(grab, i)
+	if err := s.store.AddDecision(d); err != nil {
+		return err
+	}
+	s.log.Info("decision",
+		"result", d.Result,
+		"instance", d.Instance,
+		"media", d.Media.String(),
+		"release", d.ReleaseTitle,
+		"file", d.FileName,
+		"grabScore", d.GrabScore,
+		"importScore", d.ImportScore,
+		"delta", d.Delta,
+		"lost", d.Lost,
+		"gained", d.Gained,
+		"path", d.Path,
+		"download", d.DownloadID,
+	)
+	return nil
 }

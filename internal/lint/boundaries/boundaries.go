@@ -22,7 +22,9 @@ var rules = map[string][]forbidden{
 		{"internal/", "parsing a webhook depends on nothing of ours"},
 	},
 	"internal/decide": {
-		{"internal/", "a decision is pure: it compares two records and touches nothing"},
+		{"internal/store", "a decision is pure: it compares two records and touches nothing"},
+		{"internal/server", "a decision is pure: it compares two records and touches nothing"},
+		{"internal/arr", "a decision is pure: it compares two records and touches nothing"},
 	},
 	"internal/arr": {
 		{"internal/", "the *arr client depends on nothing of ours"},
