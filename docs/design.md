@@ -2,7 +2,9 @@
 
 ## Problem
 
-Radarr grabbed this release from BeyondHD. The indexer's title parsed cleanly and matched three custom formats.
+Radarr and Sonarr score a release twice: at grab against the indexer's title, at import against the torrent's own name. When the names differ the file can land far below the score it was chosen at, and the next search replaces it with something worse.
+
+Radarr grabbed this release. The indexer's title parsed cleanly and matched three custom formats.
 
 ```
 100 Percent Wolf 2020 1080p BluRay DD5.1 x264-PTer
