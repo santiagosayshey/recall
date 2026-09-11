@@ -46,6 +46,20 @@ func compose(t *testing.T) *stack {
 			t.Logf("compose down: %v\n%s", err, out)
 		}
 	})
+	// The registry that serves the Radarr and Sonarr images rate-limits
+	// pulls now and then, so pulling gets a few tries before it counts.
+	var out string
+	var err error
+	for attempt := 1; attempt <= 5; attempt++ {
+		if out, err = s.run("pull", "--quiet", "radarr", "sonarr"); err == nil {
+			break
+		}
+		t.Logf("compose pull attempt %d: %v\n%s", attempt, err, out)
+		time.Sleep(time.Duration(attempt*attempt) * 5 * time.Second)
+	}
+	if err != nil {
+		t.Fatalf("compose pull: %v\n%s", err, out)
+	}
 	if out, err := s.run("up", "-d", "--quiet-pull"); err != nil {
 		t.Fatalf("compose up: %v\n%s", err, out)
 	}
