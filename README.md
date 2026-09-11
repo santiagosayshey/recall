@@ -36,8 +36,8 @@ services:
       RADARR_API_KEY: ${RADARR_API_KEY}
       SONARR_API_KEY: ${SONARR_API_KEY}
     volumes:
-      - ./config/config.yml:/config/config.yml:ro
-      - ./appdata:/data
+      - /path/to/config.yml:/config/config.yml:ro
+      - /path/to/data:/data
     networks:
       - media   # wherever the *arr containers are
 ```
