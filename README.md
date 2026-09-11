@@ -10,7 +10,7 @@
 
 Radarr and Sonarr score a release twice: once at grab, against the indexer's title, and once at import, against the torrent's own name. When the two names differ the file can land at a far lower score than it was chosen at, and the next search replaces it with something worse. Neither app notices.
 
-Recall receives both apps' webhooks, keeps the grab and the import for each download, and logs a decision for every import. When the import comes in lower the line names both titles, both scores, and the formats that were lost, so a log watcher such as Loggifly can page on it. See [docs/design.md](docs/design.md).
+Recall receives both apps' webhooks, keeps the grab and the import for each download, and logs a decision for every import. When the import comes in lower the line names both titles, both scores, and the formats that were lost. See [docs/design.md](docs/design.md).
 
 ## Getting started
 
