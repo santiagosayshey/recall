@@ -35,14 +35,13 @@ Nothing in either app compares the two scores, and no log line shows them togeth
 ```mermaid
 flowchart LR
     arr["Radarr, Sonarr"] -->|webhooks| recall[Recall]
-    recall --> files[(grabs, imports, decisions)]
-    recall -->|decision lines| stdout
-    stdout -.->|log watcher| ntfy
+    recall -->|logs| files[(grabs, imports, decisions)]
+    files -.->|log watcher| ntfy
 ```
 
 Recall keeps the grab, and when the import arrives compares the two and writes a decision: clean, or drift with the delta and the formats lost and gained. A drift line carries both titles and both scores.
 
-Recall only receives and writes. Paging is a log watcher's job, so Recall knows nothing about ntfy.
+Recall only receives and logs. Paging is a log watcher's job, so Recall knows nothing about ntfy.
 
 ## Storage
 
