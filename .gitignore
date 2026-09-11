@@ -1,0 +1,6 @@
+# build output
+bin/
+
+# runtime files that never belong in git
+.env
+/data/
