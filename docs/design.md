@@ -44,7 +44,11 @@ Recall only receives and logs. What happens with a drift line is the reader's bu
 
 ## Storage
 
-Three append-only JSON Lines files: grabs, imports, decisions. Each line is the normalised record plus the raw body. The grab file is read into a map by download id at start; that is the only lookup. Everything else is jq.
+Three append-only JSON Lines files: grabs, imports, decisions. Each line is the normalised record, plus the raw body for grabs and imports. The grab file is read into a map by download id at start; that is the only lookup. Everything else is jq.
+
+## Registration
+
+Recall registers its own connection on each instance from a config file, and checks the app's instance name matches the config first, since events are keyed on it. The connection carries a secret header and Recall refuses any event without it. Registration reads the connection back and fails on any difference, so a wrong connection is never silently left in place.
 
 ## Milestones
 
