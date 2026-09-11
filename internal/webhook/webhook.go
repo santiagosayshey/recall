@@ -20,12 +20,15 @@ const (
 // ErrNotWebhook is returned for a body with no event type at all.
 var ErrNotWebhook = errors.New("not an *arr webhook")
 
-// Event is one parsed body. At most one of Grab and Import is set; a body
-// Recall does not act on, such as Test or Health, is just the Header.
-type Event struct {
+// Event is one parsed body: a *Grab, an *Import, or an *Other for a body
+// Recall does not act on, such as Test or Health. Switch on the type.
+type Event interface {
+	header() Header
+}
+
+// Other is any body that is neither a grab nor an import.
+type Other struct {
 	Header
-	Grab   *Grab
-	Import *Import
 }
 
 // Header is what every body carries.
@@ -75,6 +78,8 @@ type Episode struct {
 	Number int
 }
 
+func (h Header) header() Header { return h }
+
 // body is the union of what Radarr and Sonarr send. Pointers tell presence
 // apart from emptiness, which is how the shapes are told apart.
 type body struct {
@@ -120,12 +125,11 @@ type file struct {
 }
 
 // Parse reads one body. A body with no event type is an error; every other
-// body parses, and the ones Recall does not act on come back as a bare
-// Header.
+// body parses, and the ones Recall does not act on come back as Other.
 func Parse(raw []byte) (Event, error) {
 	var b body
 	if err := json.Unmarshal(raw, &b); err != nil || b.EventType == "" {
-		return Event{}, ErrNotWebhook
+		return nil, ErrNotWebhook
 	}
 	h := Header{
 		Instance:   b.InstanceName,
@@ -144,9 +148,8 @@ func Parse(raw []byte) (Event, error) {
 			h.Media.Episodes = append(h.Media.Episodes, Episode{Season: ep.Season, Number: ep.Number})
 		}
 	}
-	e := Event{Header: h}
 	if b.Formats == nil || b.Release == nil {
-		return e, nil // nothing to score: Test, Health, MovieAdded, Sonarr's import summary
+		return &Other{h}, nil // nothing to score: Test, Health, MovieAdded, Sonarr's import summary
 	}
 	var formats []string
 	for _, f := range b.Formats.Formats {
@@ -154,14 +157,14 @@ func Parse(raw []byte) (Event, error) {
 	}
 	switch {
 	case b.EventType == "Grab":
-		e.Grab = &Grab{
+		return &Grab{
 			Header:       h,
 			ReleaseTitle: b.Release.Title,
 			Group:        b.Release.Group,
 			Quality:      b.Release.Quality,
 			Score:        b.Formats.Score,
 			Formats:      formats,
-		}
+		}, nil
 	case b.EventType == "Download" && (b.MovieFile != nil || b.EpisodeFile != nil):
 		f := b.MovieFile
 		if f == nil {
@@ -171,7 +174,7 @@ func Parse(raw []byte) (Event, error) {
 		if name == "" {
 			name = path.Base(f.Relative)
 		}
-		e.Import = &Import{
+		return &Import{
 			Header:       h,
 			ReleaseTitle: b.Release.Title,
 			FileName:     name,
@@ -181,7 +184,7 @@ func Parse(raw []byte) (Event, error) {
 			Score:        b.Formats.Score,
 			Formats:      formats,
 			IsUpgrade:    b.IsUpgrade,
-		}
+		}, nil
 	}
-	return e, nil
+	return &Other{h}, nil // scored, but not a kind Recall handles
 }
