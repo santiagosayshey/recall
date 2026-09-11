@@ -70,7 +70,7 @@ instances:
 
 On start Recall checks each app calls itself by the configured name, then creates a connection named Recall, or updates it if it differs, or leaves it alone if it already matches. It reads the connection back and refuses to consider the instance registered unless it is exactly what was written. An app that is not up yet is retried, so the order containers start in does not matter. The connection asks for grabs, imports and upgrades only.
 
-`recall register` does the same once and exits non-zero on any failure, for checking a config by hand.
+To check a config by hand, run `recall register`. It registers every instance once and exits non-zero if any of them failed.
 
 ### Environment
 
